@@ -375,4 +375,7 @@ body {
   .btn-takeoff {
     padding: 10px 30px;
   }
+  .celestial-body[style] {
+    margin-top: 0 !important;
+  }
 }
