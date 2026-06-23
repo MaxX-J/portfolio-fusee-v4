@@ -62,15 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
         mapNodes.forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 const targetIndex = parseInt(btn.getAttribute('data-scroll-to'));
-                const targetScroll = nodePositions[targetIndex];
-
-                // On scroll la page (ScrollTrigger s'occupe de translater le track)
-                // Ratio du scroll total
-                const ratio = targetScroll / (totalTrackWidth - window.innerWidth);
-                const scrollPos = ratio * (totalTrackWidth); // Approximatif, GSAP scrollTo plugin est mieux mais on fait simple
+                // On centre l'astéroïde au milieu de l'écran en soustrayant la moitié de la largeur
+                let targetScroll = nodePositions[targetIndex] - (window.innerWidth / 2);
+                if (targetScroll < 0) targetScroll = 0;
 
                 window.scrollTo({
-                    top: targetScroll, // Car 1px scrollY = 1px translationX via scrub:1
+                    top: targetScroll,
                     behavior: 'smooth'
                 });
             });
@@ -109,8 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const nodeX = nodePositions[index];
             const distance = Math.abs(centerScreen - nodeX);
 
-            // Si la fusée (centre) est à moins de 600px de l'astéroïde
-            if (distance < 600) {
+            // Détection réactive : 600px minimum, ou un pourcentage de l'écran (pratique sur les écrans plus petits type Mac)
+            const detectionRadius = Math.max(600, window.innerWidth * 0.45);
+
+            if (distance < detectionRadius) {
                 node.classList.add('in-range');
             } else {
                 node.classList.remove('in-range');
