@@ -3,7 +3,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     gsap.registerPlugin(ScrollTrigger);
 
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 1. MISE EN PLACE DE LA SCÈNE 3D/2D
     // ==========================================
-    
+
     if (!isMobile && !isReducedMotion) {
+        const nodePositions = [];
         // Positionnement horizontal des planètes/astéroïdes sur le track
         nodes.forEach((node, index) => {
             let xPos = index * NODE_SPACING;
@@ -62,12 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', (e) => {
                 const targetIndex = parseInt(btn.getAttribute('data-scroll-to'));
                 const targetScroll = nodePositions[targetIndex];
-                
+
                 // On scroll la page (ScrollTrigger s'occupe de translater le track)
                 // Ratio du scroll total
                 const ratio = targetScroll / (totalTrackWidth - window.innerWidth);
                 const scrollPos = ratio * (totalTrackWidth); // Approximatif, GSAP scrollTo plugin est mieux mais on fait simple
-                
+
                 window.scrollTo({
                     top: targetScroll, // Car 1px scrollY = 1px translationX via scrub:1
                     behavior: 'smooth'
@@ -79,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('keydown', (e) => {
             // Ne pas scroller si une modale est ouverte
             if (document.querySelector('dialog[open]')) return;
-            
+
             // GSAP convertit le scroll vertical en horizontal, donc on scroll verticalement
             if (e.key === 'ArrowRight') {
                 window.scrollBy({ top: window.innerWidth / 2, behavior: 'smooth' });
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     function checkProximity(progress) {
         if (isMobile) return;
-        
+
         // Progress va de 0 à 1.
         // x actuel du track :
         const currentX = progress * (totalTrackWidth - window.innerWidth);
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         nodes.forEach((node, index) => {
             // Seuls les astéroïdes (1 à 5) sont atterrissables
-            if (index === 0 || index === nodes.length - 1) return; 
+            if (index === 0 || index === nodes.length - 1) return;
 
             const nodeX = nodePositions[index];
             const distance = Math.abs(centerScreen - nodeX);
@@ -130,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 3. ATTERRISSAGE & OVERLAYS (Dialogs)
     // ==========================================
-    
+
     const landButtons = document.querySelectorAll('.btn-land');
     const takeoffButtons = document.querySelectorAll('.btn-takeoff');
 
@@ -138,20 +139,20 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-target');
             const dialog = document.getElementById(targetId);
-            
+
             if (dialog) {
                 // Optionnel : Jouer un son (peut être bloqué par le navigateur si pas d'interaction préalable)
-                try { sfx.currentTime = 0; sfx.play(); } catch(e){}
+                try { sfx.currentTime = 0; sfx.play(); } catch (e) { }
 
                 // Zoom effect sur la scène spatiale
                 gsap.to('#space-track', { scale: 1.5, opacity: 0, duration: 0.5, ease: "power2.inOut" });
                 gsap.to('.rocket-wrapper', { scale: 0, duration: 0.5 });
-                
+
                 setTimeout(() => {
                     dialog.showModal();
                     // Empêcher le scroll background
                     document.body.style.overflow = 'hidden';
-                    
+
                     // Forcer le scroll tout en haut de la fiche (corrige le bug de l'autofocus natif)
                     const content = dialog.querySelector('.fiche-content');
                     if (content) content.scrollTop = 0;
@@ -164,8 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
     takeoffButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const dialog = btn.closest('dialog');
-            
-            try { sfx.currentTime = 0; sfx.play(); } catch(e){}
+
+            try { sfx.currentTime = 0; sfx.play(); } catch (e) { }
 
             dialog.close();
             document.body.style.overflow = ''; // Restore scroll
@@ -197,16 +198,16 @@ document.addEventListener('DOMContentLoaded', () => {
     images.forEach(img => {
         img.addEventListener('click', (e) => {
             e.stopPropagation(); // Empêche le flip de la carte
-            
+
             const lightbox = document.createElement('dialog');
             lightbox.className = 'lightbox-dialog';
             lightbox.innerHTML = `<img src="${img.src}" alt="${img.alt}" />`;
-            
+
             lightbox.addEventListener('click', () => {
                 lightbox.close();
                 lightbox.remove();
             });
-            
+
             document.body.appendChild(lightbox);
             lightbox.showModal();
         });
@@ -232,15 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 4. MOTEUR CANVAS (Étoiles en parallaxe)
     // ==========================================
-    
+
     if (!isReducedMotion) {
         const canvas = document.getElementById('spaceCanvas');
         const ctx = canvas.getContext('2d');
-        
+
         let width, height;
         let stars = [];
         let shootingStars = [];
-        
+
         function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
@@ -279,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function render() {
             ctx.clearRect(0, 0, width, height);
-            
+
             // On récupère le scroll global pour la parallaxe
             let scrollY = window.scrollY || 0;
             // Ratio
@@ -287,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const time = Date.now() * 0.001;
 
             // Nébuleuses discrètes
-            const gradient1 = ctx.createRadialGradient(width*0.5, height*0.5, 0, width*0.5, height*0.5, width*0.6);
-            gradient1.addColorStop(0, 'rgba(30, 40, 80, 0.05)'); 
+            const gradient1 = ctx.createRadialGradient(width * 0.5, height * 0.5, 0, width * 0.5, height * 0.5, width * 0.6);
+            gradient1.addColorStop(0, 'rgba(30, 40, 80, 0.05)');
             gradient1.addColorStop(1, 'rgba(0, 0, 0, 0)');
             ctx.fillStyle = gradient1;
             ctx.fillRect(0, 0, width, height);
@@ -298,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Mouvement vers la gauche basé sur le scroll
                 let xOffset = (progress * width * s.layer * 2);
                 let drawX = s.x - xOffset;
-                
+
                 // Wrap around
                 while (drawX < 0) drawX += width * 2;
                 while (drawX > width * 2) drawX -= width * 2;
