@@ -18,13 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configuration de la scène
     const NODE_SPACING = window.innerWidth * 1.5; // Distance entre chaque astéroïde
     let totalTrackWidth = 0;
+    let nodePositions = [];
 
     // ==========================================
     // 1. MISE EN PLACE DE LA SCÈNE 3D/2D
     // ==========================================
 
     if (!isMobile && !isReducedMotion) {
-        const nodePositions = [];
         // Positionnement horizontal des planètes/astéroïdes sur le track
         nodes.forEach((node, index) => {
             let xPos = index * NODE_SPACING;
