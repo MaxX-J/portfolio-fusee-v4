@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Pédagogique - Maxens Sevilla</title>
+    <meta name="description" content="Portfolio pédagogique BUT MMI 2 de Maxens Sevilla. Découvrez ma progression à travers 5 compétences clés.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Audio Element (Optional Whoosh) -->
+    <audio id="sfx-whoosh" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Accessibility Mini-Map & Progress -->
+    <nav id="a11y-menu" aria-label="Menu de navigation spatiale">
+        <div class="minimap-track">
+            <button class="map-node earth-node" data-scroll-to="0" aria-label="Retour à la Terre">🌍</button>
+            <button class="map-node asteroid-node" data-target="modal-comprendre" data-scroll-to="1" aria-label="Aller à Comprendre" style="--c: #C0392B;"></button>
+            <button class="map-node asteroid-node" data-target="modal-concevoir" data-scroll-to="2" aria-label="Aller à Concevoir" style="--c: #E67E22;"></button>
+            <button class="map-node asteroid-node" data-target="modal-exprimer" data-scroll-to="3" aria-label="Aller à Exprimer" style="--c: #C8961A;"></button>
+            <button class="map-node asteroid-node" data-target="modal-developper" data-scroll-to="4" aria-label="Aller à Développer" style="--c: #1E8449;"></button>
+            <button class="map-node asteroid-node" data-target="modal-entreprendre" data-scroll-to="5" aria-label="Aller à Entreprendre" style="--c: #2C3E9E;"></button>
+            <button class="map-node moon-node" data-scroll-to="6" aria-label="Aller à la Lune">🌕</button>
+        </div>
+    </nav>
+
+    <!-- Dynamic Space Background & Canvas -->
+    <div class="space-bg">
+        <canvas id="spaceCanvas"></canvas>
+    </div>
+
+    <!-- MAIN SPACE SCENE -->
+    <div id="space-scene">
+        
+        <!-- The Fixed Rocket (Centered, Horizontal) -->
+        <div class="rocket-wrapper" id="rocket">
+            <div class="rocket-container">
+                <svg class="rocket-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300">
+                    <defs>
+                        <linearGradient id="rocketBody" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#cfd8dc" />
+                        </linearGradient>
+                        <linearGradient id="rocketWindow" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#81d4fa" />
+                            <stop offset="100%" stop-color="#0288d1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 50 200 Q 20 250 20 280 L 70 260 Z" fill="#b0bec5"/>
+                    <path d="M 150 200 Q 180 250 180 280 L 130 260 Z" fill="#b0bec5"/>
+                    <path d="M 90 230 L 100 280 L 110 230 Z" fill="#90a4ae"/>
+                    <path d="M 100 20 C 100 20, 50 100, 50 240 L 150 240 C 150 100, 100 20, 100 20 Z" fill="url(#rocketBody)"/>
+                    <path d="M 100 20 C 100 20, 75 60, 68 90 L 132 90 C 125 60, 100 20, 100 20 Z" fill="#ff5252"/>
+                    <circle cx="100" cy="130" r="28" fill="#90a4ae"/>
+                    <circle cx="100" cy="130" r="22" fill="url(#rocketWindow)"/>
+                    <path d="M 85 120 Q 100 110 115 120 Q 105 130 85 120 Z" fill="rgba(255,255,255,0.6)"/>
+                    <path d="M 70 240 L 130 240 L 120 260 L 80 260 Z" fill="#546e7a"/>
+                </svg>
+                <div class="exhaust-flames"></div>
+            </div>
+        </div>
+
+        <!-- The Scrolling Track (Translates left on scroll) -->
+        <div id="space-track">
+            
+            <!-- 0. Earth -->
+            <div class="celestial-body earth-container" id="node-0">
+                <img src="assets/img/earth.png" alt="Terre" class="planet-img" onerror="this.src='https://placehold.co/600x600/0277bd/ffffff?text=Terre'">
+                <div class="intro-text">
+                    <h1>Maxens Sevilla</h1>
+                    <h2>Portfolio pédagogique — BUT MMI 2</h2>
+                    <p>Départ imminent. Utilisez la molette ou les flèches pour avancer.</p>
+                </div>
+            </div>
+
+            <!-- 1. Comprendre -->
+            <div class="celestial-body asteroid-container" id="node-1">
+                <div class="asteroid-wrapper">
+                    <img src="assets/img/asteroid-comprendre.png" alt="Astéroïde Comprendre" class="asteroid-img" onerror="this.src='https://placehold.co/400x400/C0392B/ffffff?text=Asteroide'">
+                    <div class="asteroid-glow" style="--c: #C0392B;"></div>
+                    <div class="asteroid-ui">
+                        <h3>Comprendre (AC21.05)</h3>
+                        <button class="btn primary btn-land" data-target="modal-comprendre">Atterrir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Concevoir -->
+            <div class="celestial-body asteroid-container" id="node-2" style="margin-top: 20vh;">
+                <div class="asteroid-wrapper">
+                    <img src="assets/img/asteroid-concevoir.png" alt="Astéroïde Concevoir" class="asteroid-img" onerror="this.src='https://placehold.co/400x400/E67E22/ffffff?text=Asteroide'">
+                    <div class="asteroid-glow" style="--c: #E67E22;"></div>
+                    <div class="asteroid-ui">
+                        <h3>Concevoir (AC22.03)</h3>
+                        <button class="btn primary btn-land" data-target="modal-concevoir">Atterrir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Exprimer -->
+            <div class="celestial-body asteroid-container" id="node-3" style="margin-top: -15vh;">
+                <div class="asteroid-wrapper">
+                    <img src="assets/img/asteroid-exprimer.png" alt="Astéroïde Exprimer" class="asteroid-img" onerror="this.src='https://placehold.co/400x400/C8961A/ffffff?text=Asteroide'">
+                    <div class="asteroid-glow" style="--c: #C8961A;"></div>
+                    <div class="asteroid-ui">
+                        <h3>Exprimer (AC23.03)</h3>
+                        <button class="btn primary btn-land" data-target="modal-exprimer">Atterrir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Développer -->
+            <div class="celestial-body asteroid-container" id="node-4" style="margin-top: 10vh;">
+                <div class="asteroid-wrapper">
+                    <img src="assets/img/asteroid-developper.png" alt="Astéroïde Développer" class="asteroid-img" onerror="this.src='https://placehold.co/400x400/1E8449/ffffff?text=Asteroide'">
+                    <div class="asteroid-glow" style="--c: #1E8449;"></div>
+                    <div class="asteroid-ui">
+                        <h3>Développer (AC24.03)</h3>
+                        <button class="btn primary btn-land" data-target="modal-developper">Atterrir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Entreprendre -->
+            <div class="celestial-body asteroid-container" id="node-5" style="margin-top: -5vh;">
+                <div class="asteroid-wrapper">
+                    <img src="assets/img/asteroid-entreprendre.png" alt="Astéroïde Entreprendre" class="asteroid-img" onerror="this.src='https://placehold.co/400x400/2C3E9E/ffffff?text=Asteroide'">
+                    <div class="asteroid-glow" style="--c: #2C3E9E;"></div>
+                    <div class="asteroid-ui">
+                        <h3>Entreprendre (AC25.04)</h3>
+                        <button class="btn primary btn-land" data-target="modal-entreprendre">Atterrir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Moon -->
+            <div class="celestial-body moon-container" id="node-6">
+                <img src="assets/img/moon.png" alt="Lune" class="planet-img" onerror="this.src='https://placehold.co/800x800/9e9e9e/ffffff?text=Lune'">
+                <div class="outro-text">
+                    <h2>Cette année, la Lune.</h2>
+                    <p>L'année prochaine… peut-être Mars. 🚀</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         OVERLAYS (FICHES COMPÉTENCES)
+         ========================================== -->
+    <div id="overlays-container">
+        
+        <!-- 1. Fiche Comprendre -->
+        <dialog class="fiche-overlay" id="modal-comprendre" style="--c: #C0392B;">
+            <div class="fiche-content">
+                <header class="skill-header">
+                    <h2 class="skill-title">1. Comprendre</h2>
+                    <p class="skill-ac"><strong>AC21.05</strong> - Cartographier les expériences utilisateur (points de contact, de friction et de satisfaction, carte d'empathie) | <strong>CE1.02</strong> - en écoutant et observant les utilisateurs.</p>
+                </header>
+
+                <div class="traces-container">
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 1 (avant)</span>
+                                <h3 class="trace-title">Roomies</h3>
+                                <p class="trace-context">Application mobile pour simplifier le quotidien des colocataires. J'ai mené la recherche utilisateur en amont de la conception.</p>
+                                <div class="images-grid">
+                                    <img src="assets/img/persona-leo.png" alt="Persona Léo" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/400x300/333/999?text=Persona+Leo'">
+                                    <img src="assets/img/questionnaire-roomies.png" alt="Questionnaire Roomies" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/400x300/333/999?text=Questionnaire'">
+                                </div>
+                                <p class="trace-note">→ écoute du déclaratif.</p>
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Roomies</h3>
+                                <ul>
+                                    <li><strong>Méthode :</strong> Questionnaire déclaratif</li>
+                                    <li><strong>Livrable :</strong> Persona de synthèse ("Léo")</li>
+                                    <li><strong>Besoins relevés :</strong> Visibilité des tâches, centralisation</li>
+                                    <li><strong>Biais :</strong> "Ce que l'utilisateur dit vouloir"</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progression">
+                        <i data-lucide="arrow-down" class="arrow-icon pulse"></i>
+                        <span class="progression-word">Écouter → Observer</span>
+                    </div>
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 2 (après)</span>
+                                <h3 class="trace-title">KULT</h3>
+                                <p class="trace-context">Application culturelle. Je suis passé de l'écoute à l'observation en testant le prototype avec de vrais utilisateurs.</p>
+                                <img src="assets/img/kult-proto.png" alt="Prototype KULT" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=Proto+KULT'">
+                                <p class="trace-note">→ observation mesurée.</p>
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : KULT</h3>
+                                <ul>
+                                    <li><strong>Testeurs :</strong> 10 personnes (modérés et non-modérés)</li>
+                                    <li><strong>Mesures :</strong> Échelles SUS (≈ 72/100) et DEEP</li>
+                                    <li><strong>Frictions relevées :</strong> Agenda non scrollable, navbar cachée</li>
+                                    <li><strong>Avantage :</strong> "Ce que l'utilisateur fait réellement"</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progression-summary">
+                    <h4>Mon analyse (preuve)</h4>
+                    <p>Ces deux traces ne sont pas de simples livrables : elles montrent deux façons différentes de comprendre l'utilisateur. Sur Roomies, j'ai écouté l'utilisateur : un questionnaire pour recueillir les besoins déclarés des colocataires, puis un persona (« Léo ») qui cartographie ses besoins (visibilité des tâches, centralisation), ses frustrations (charge mentale, tensions, chaos financier) et ses motivations (équité, harmonie). C'est une première carte d'empathie, mais fondée sur du déclaratif - ce que les gens disent vouloir.</p>
+                    <p>Sur KULT, je suis passé à l'observation : j'ai regardé de vrais utilisateurs se confronter au prototype et j'ai mesuré leur expérience (SUS, DEEP). Je ne devine plus le ressenti, je le constate : je relève des points de friction concrets (l'agenda où l'utilisateur ne comprend pas qu'on peut scroller, la navbar qui disparaît) et des points de satisfaction (les balades, les quiz). C'est exactement ce que demande l'AC21.05 - cartographier l'expérience réelle, points de friction et de satisfaction.</p>
+                    <h4 style="margin-top:20px;">Mon évolution entre les deux traces</h4>
+                    <p>Entre Roomies et KULT, ma manière de comprendre l'utilisateur a changé de nature. Je suis passé de « ce que l'utilisateur dit vouloir » (persona issu d'un questionnaire) à « ce que l'utilisateur fait réellement » (observation en test, mesurée). J'ai compris que les deux ne coïncident pas toujours : des fonctions qui semblaient claires « sur le papier » bloquaient en situation. Cette bascule du déclaratif vers l'observé, et l'usage d'outils standardisés (SUS, DEEP, carte des frictions), marque ma progression sur la compétence Comprendre. C'est aussi le sens de la composante CE1.02 : je ne fais plus seulement « écouter », j'ai appris à « observer ».</p>
+                    <h4 style="margin-top:20px;">Ma difficulté</h4>
+                    <p>Ma principale difficulté sur KULT a été de ne pas influencer les testeurs : au début je les guidais dès qu'ils hésitaient, ce qui faussait les résultats. J'ai appris à rester en retrait, à laisser le silence et à seulement noter les blocages. C'est en arrêtant d'aider que des problèmes comme le scroll de l'agenda sont vraiment ressortis.</p>
+                </div>
+                
+                <button class="btn outline btn-takeoff">Redécoller 🚀</button>
+            </div>
+        </dialog>
+
+        <!-- 2. Fiche Concevoir -->
+        <dialog class="fiche-overlay" id="modal-concevoir" style="--c: #E67E22;">
+            <div class="fiche-content">
+                <header class="skill-header">
+                    <h2 class="skill-title">2. Concevoir</h2>
+                    <p class="skill-ac"><strong>AC22.03</strong> - Co-construire une recommandation stratégique (en structurant un plan d'action) | <strong>CE2.05</strong> - en présentant de façon convaincante la réponse proposée<br>
+                    <em>Complément CE2.03 - en s'appuyant sur les usages et les modes de communication observés.</em></p>
+                </header>
+
+                <div class="traces-container">
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 1 (avant)</span>
+                                <h3 class="trace-title">Pro'Signes (S1)</h3>
+                                <p class="trace-context">Organisme de formation en synergologie. J'ai analysé sa stratégie de communication (site, réseaux) puis formulé des propositions d'amélioration.</p>
+                                <img src="assets/img/prosignes.png" alt="Pro'Signes" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=Pro+Signes'">
+                                <p class="trace-note">→ propositions ponctuelles.</p>
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Pro'Signes</h3>
+                                <ul>
+                                    <li><strong>Démarche :</strong> Constat des points forts/faibles</li>
+                                    <li><strong>Action :</strong> Liste de recommandations déconnectées (identité, vidéos, témoignages)</li>
+                                    <li><strong>Lacune :</strong> Pas de hiérarchie ni de plan d'ensemble stratégique</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progression">
+                        <i data-lucide="arrow-down" class="arrow-icon pulse"></i>
+                        <span class="progression-word">Propositions → Plan stratégique</span>
+                    </div>
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 2 (après)</span>
+                                <h3 class="trace-title">Palma Rosa (MMI2)</h3>
+                                <p class="trace-context">Festival fragilisé par un bad buzz sur ses prix. J'ai co-construit une recommandation stratégique de relance.</p>
+                                <img src="assets/img/palma-rosa.png" alt="Palma Rosa" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=Palma+Rosa'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Palma Rosa</h3>
+                                <ul>
+                                    <li><strong>Diagnostic :</strong> Matrice SWOT ciblée</li>
+                                    <li><strong>Cibles :</strong> Segmentation "Social-Festers" / "Music Lovers"</li>
+                                    <li><strong>Axes d'action :</strong> Billetterie "Trust Tiering", "Road to Palmarosa", Omnicanal</li>
+                                    <li><strong>Objectifs :</strong> Reconstruire la confiance et la trésorerie</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progression-summary">
+                    <h4>Mon analyse (preuve)</h4>
+                    <p>Ces deux traces montrent comment ma manière de concevoir une réponse stratégique a mûri. Sur Pro'Signes (S1), je partais de l'observation d'un site et je proposais des améliorations : c'était pertinent, mais c'était une liste de propositions ponctuelles (graphique, vidéos, témoignages...), sans hiérarchie ni plan d'ensemble.</p>
+                    <p>Sur Palma Rosa (MMI2), je co-construis une vraie recommandation stratégique : je pose un diagnostic (SWOT, cibles segmentées "Social-Festers" / "Music Lovers"), puis je structure la réponse en axes et en plan d'action - la billetterie "Trust Tiering" pour répondre au bad buzz prix, le storytelling "Road to Palmarosa" pour reconstruire la confiance, une logique omnicanale de l'acquisition à la fidélisation. C'est exactement l'AC22.03 - co-construire une recommandation stratégique en structurant un plan d'action - et la CE2.05 : présenter la réponse de façon convaincante.</p>
+                    <h4 style="margin-top:20px;">Mon évolution entre les deux traces</h4>
+                    <p>Entre Pro'Signes et Palma, je suis passé de "proposer des améliorations" à "construire une stratégie". Avant, je listais des idées ; maintenant, je pars d'un diagnostic, je relie chaque action à un objectif (confiance, trésorerie, engagement) et je priorise. Cette montée du ponctuel vers le stratégique et structuré, ancrée dans les usages observés (CE2.03), marque ma progression sur la compétence Concevoir.</p>
+                    <h4 style="margin-top:20px;">Ma difficulté</h4>
+                    <p>Sur Palma, ma principale difficulté a été de ne pas me disperser : face à tous les problèmes du festival, j'ai dû prioriser et rattacher chaque action à un objectif clair, au lieu d'empiler les idées comme je le faisais sur Pro'Signes. C'est là que j'ai compris la différence entre une liste de bonnes idées et un plan d'action stratégique.</p>
+                </div>
+                
+                <button class="btn outline btn-takeoff">Redécoller 🚀</button>
+            </div>
+        </dialog>
+
+        <!-- 3. Fiche Exprimer -->
+        <dialog class="fiche-overlay" id="modal-exprimer" style="--c: #C8961A;">
+            <div class="fiche-content">
+                <header class="skill-header">
+                    <div class="title-with-badge">
+                        <h2 class="skill-title">3. Exprimer</h2>
+                        <span class="badge glow-badge">intra ↔ extra</span>
+                    </div>
+                    <p class="skill-ac"><strong>AC23.03</strong> - Créer et décliner une identité visuelle | <strong>CE3.01</strong> - en veillant à la qualité esthétique des créations.</p>
+                </header>
+
+                <div class="traces-container">
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 1 (avant, intra)</span>
+                                <h3 class="trace-title">Affiche "Fête de la saucisse"</h3>
+                                <p class="trace-context">Affiche événementielle pour la fête de la saucisse d'Anduze. Thème et style imposés en cours (mélange photo + dessin).</p>
+                                <img src="assets/img/affiche-saucisse.png" alt="Affiche Saucisse" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/600x800/333/999?text=Affiche+Saucisse'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Affiche</h3>
+                                <ul>
+                                    <li><strong>Cadre :</strong> Style imposé (dessin + photo)</li>
+                                    <li><strong>Esthétique :</strong> Choix décoratifs (orange/sarcelle)</li>
+                                    <li><strong>Limites :</strong> Manque de recherche sur l'environnement graphique</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progression">
+                        <i data-lucide="arrow-down" class="arrow-icon pulse"></i>
+                        <span class="progression-word">Faire joli → Porter une identité</span>
+                    </div>
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 2 (après, extra)</span>
+                                <h3 class="trace-title">Parution magazine de stage</h3>
+                                <p class="trace-context">Page de parution pour Architruc & Baltaz'art publiée dans un magazine. Objectif : porter l'identité de l'entreprise.</p>
+                                <img src="assets/img/parution-architruc.png" alt="Parution Architruc" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/600x800/333/999?text=Parution'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Architruc</h3>
+                                <ul>
+                                    <li><strong>Démarche :</strong> Étude préalable de la charte client</li>
+                                    <li><strong>Codes intégrés :</strong> Orange corail signature, lettering vertical</li>
+                                    <li><strong>Direction Art :</strong> Univers épuré et haut de gamme assumé</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progression-summary">
+                    <h4>Mon analyse (preuve)</h4>
+                    <p>Ces deux traces montrent comment ma façon de créer une identité visuelle a évolué. Sur l'affiche de la fête de la saucisse, je suis parti d'un thème et d'un style imposés (un mélange photo + dessin) et j'ai surtout cherché à faire "joli" : une composition colorée, des éléments dessinés autour d'une photo. Mais ma prof m'a justement reproché de ne pas avoir assez recherché l'environnement graphique ni posé une vraie direction artistique. Avec le recul, l'affiche manque d'un parti pris assumé : les choix de couleurs et de typographies sont décoratifs plus que justifiés.</p>
+                    <p>Sur la parution de stage pour Architruc & Baltaz'art, je n'invente plus une identité "libre" : je dois porter celle d'une entreprise réelle. J'ai donc commencé par étudier sa charte - l'orange corail signature, le lettering vertical du nom, le logo (les deux points), un univers déco haut de gamme, épuré. Puis je l'ai déclinée sur une page de magazine en gardant ces codes : c'est exactement l'AC23.03 (créer et décliner une identité visuelle) et la composante CE3.01 - une qualité esthétique cette fois justifiée par les références de la marque, et non plus seulement décorative.</p>
+                    <h4 style="margin-top:20px;">Mon évolution entre les deux traces</h4>
+                    <p>Entre l'affiche et la parution, je suis passé de "faire un visuel agréable à regarder" à "construire une identité cohérente et justifiée". Le reproche de ma prof sur l'affiche - pas assez de recherches sur l'environnement graphique - est devenu mon point de départ au stage : j'ai appris à regarder avant de créer, à m'appuyer sur une charte et un univers de marque existants plutôt que sur mes seuls goûts. C'est cette montée de l'esthétique "intuitive" vers une direction artistique documentée et assumée qui marque ma progression sur la compétence Exprimer.</p>
+                    <h4 style="margin-top:20px;">Ma difficulté</h4>
+                    <p>Sur l'affiche, ma difficulté a été de respecter le style imposé (photo + dessin) sans que le rendu paraisse disparate - et je n'avais pas assez nourri mes choix de références. Au stage, la difficulté était inverse : me discipliner pour rester fidèle à la charte d'Architruc plutôt que d'imposer mes propres envies graphiques. C'est en acceptant cette contrainte que la page est devenue vraiment "de la marque".</p>
+                </div>
+                
+                <button class="btn outline btn-takeoff">Redécoller 🚀</button>
+            </div>
+        </dialog>
+
+        <!-- 4. Fiche Développer -->
+        <dialog class="fiche-overlay" id="modal-developper" style="--c: #1E8449;">
+            <div class="fiche-content">
+                <header class="skill-header">
+                    <div class="title-with-badge">
+                        <h2 class="skill-title">4. Développer</h2>
+                        <span class="badge glow-badge">intra ↔ extra</span>
+                    </div>
+                    <p class="skill-ac"><strong>AC24.02 → AC24.03</strong> - Back office puis interactions riches / API | <strong>CE4.03</strong> - en produisant du code fonctionnel, sobre et réutilisable. <br><strong>Bonus AC24.05</strong> - Optimiser une appli web (référencement + temps de chargement) | CE4.01 - standards du Web.</p>
+                </header>
+
+                <div class="traces-container">
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 1 (avant)</span>
+                                <h3 class="trace-title">Planet Brick / LEGO (S1)</h3>
+                                <p class="trace-context">Site communautaire LEGO en PHP / MySQL (catalogue, notes, collection). Données importées d'un CSV, rendu serveur.</p>
+                                <img src="assets/img/code-planetbrick.png" alt="Code Planet Brick" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=Planet+Brick'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Planet Brick</h3>
+                                <ul>
+                                    <li><strong>Stack :</strong> PHP & MySQL classiques</li>
+                                    <li><strong>Architecture :</strong> Rendu HTML côté serveur</li>
+                                    <li><strong>Données :</strong> Figées, issues d'un import CSV</li>
+                                    <li><strong>Limites :</strong> Code peu réutilisable, rechargement de page</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progression">
+                        <i data-lucide="arrow-down" class="arrow-icon pulse"></i>
+                        <span class="progression-word">Rendu serveur → API temps réel</span>
+                    </div>
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 2 (après)</span>
+                                <h3 class="trace-title">Steam Tracker (S3)</h3>
+                                <p class="trace-context">Tracker de jeux vidéo en Node.js / Express, avec authentification OAuth et données en temps réel (APIs IGDB & Steam).</p>
+                                <img src="assets/img/code-steam.png" alt="Code Steam Tracker" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=Steam+Tracker'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Steam Tracker</h3>
+                                <ul>
+                                    <li><strong>Stack :</strong> Node.js, Express, async/await</li>
+                                    <li><strong>Architecture :</strong> Découplée (Client + API REST)</li>
+                                    <li><strong>Intégrations :</strong> OAuth et APIs externes (IGDB, Steam)</li>
+                                    <li><strong>Résultat :</strong> Front réactif, données temps réel vivantes</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card trace bonus-trace" tabindex="0">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <h3 class="trace-title">Bonus référencement (AC24.05) - intra vers extra</h3>
+                            <p class="trace-context">En cours, j'ai réalisé un exercice de référencement rédactionnel (cas client Jill Delange) : balises title/meta, hiérarchie Hn, attributs alt, ancres - du SEO on-page de base (intra). En stage, j'ai mis en place un référencement technique complet sur un vrai site client (Architruc & Baltaz'art).</p>
+                            <div class="images-grid">
+                                <img src="assets/img/seo-exo.png" alt="SEO Exo" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/400x300/333/999?text=SEO+Exo'">
+                                <img src="assets/img/seo-archi.png" alt="SEO Archi" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/400x300/333/999?text=SEO+Archi'">
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <h3>L'Optimisation SEO</h3>
+                            <ul>
+                                <li><strong>Intra (Scolaire) :</strong> SEO On-Page (Hn, metas, alt)</li>
+                                <li><strong>Extra (Stage) :</strong> SEO Technique (robots.txt, sitemap.xml)</li>
+                                <li><strong>Perf :</strong> Images WebP (sharp), balises Open Graph</li>
+                            </ul>
+                            <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progression-summary">
+                    <h4>Mon analyse (preuve)</h4>
+                    <p>Ces deux traces montrent ma montée en compétence sur le développement web. Sur Planet Brick, je produisais une application à rendu serveur : le PHP générait tout le HTML, les données étaient figées (CSV puis MySQL), et le code était peu réutilisable (variables globales, JS en ligne dans le HTML). Ça marchait, mais chaque action rechargeait toute la page.</p>
+                    <p>Sur Steam Tracker, je suis passé à une architecture client-serveur découplée : une API REST, de l'async/await, une authentification OAuth, et des données en temps réel (le nombre de joueurs Steam en direct). Le code est plus sobre et réutilisable (const/let, .map(), template literals, fonctions utilitaires) - c'est exactement la composante CE4.03 : un code fonctionnel, sobre et réutilisable. Je passe du back office classique (AC24.02) aux interactions riches et à l'intégration d'API (AC24.03).</p>
+                    <h4 style="margin-top:20px;">Mon évolution</h4>
+                    <p>Entre Planet Brick et Steam Tracker, je suis passé de "le serveur génère tout, les données sont figées" à "un front découplé qui consomme des API en temps réel". J'ai gagné en propreté de code et en autonomie technique (async, OAuth, API REST). Et avec le SEO, j'ai appris à ne pas seulement faire fonctionner un site, mais à l'optimiser pour qu'il soit trouvé et rapide. C'est cette double progression - architecture et optimisation - qui marque ma compétence Développer.</p>
+                    <h4 style="margin-top:20px;">Ma difficulté</h4>
+                    <p>Ma principale difficulté sur Steam Tracker a été la gestion de l'asynchrone et de l'authentification OAuth : au début mes appels API partaient avant d'avoir le token. J'ai appris à structurer mes async/await et à récupérer le token avant les requêtes - c'est là que j'ai compris le flux client-serveur.</p>
+                </div>
+                
+                <button class="btn outline btn-takeoff">Redécoller 🚀</button>
+            </div>
+        </dialog>
+
+        <!-- 5. Fiche Entreprendre -->
+        <dialog class="fiche-overlay" id="modal-entreprendre" style="--c: #2C3E9E;">
+            <div class="fiche-content">
+                <header class="skill-header">
+                    <h2 class="skill-title">5. Entreprendre</h2>
+                    <p class="skill-ac"><strong>AC25.04</strong> - Collaborer au sein des organisations | <strong>CE5.02</strong> - en favorisant la collaboration entre les parties prenantes du projet<br><strong>Bonus AC25.01</strong> - Gérer un projet avec une méthode agile (démontré sur Croq'Berry).</p>
+                </header>
+
+                <div class="traces-container">
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 1 (avant)</span>
+                                <h3 class="trace-title">TPA2 / Béziers Urban Trail</h3>
+                                <p class="trace-context">Projet de groupe (10 personnes) pour organiser la participation de l'IUT au Béziers Urban Trail. Gestion de projet classique.</p>
+                                <img src="assets/img/tpa2-budget.png" alt="TPA2 Budget" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=TPA2+Budget'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : TPA2</h3>
+                                <ul>
+                                    <li><strong>Méthodologie :</strong> Informelle et peu cadrée</li>
+                                    <li><strong>Équipe :</strong> 10 personnes, tâches par affinité</li>
+                                    <li><strong>Ma contribution :</strong> Budget complet et gestion devis</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progression">
+                        <i data-lucide="arrow-down" class="arrow-icon pulse"></i>
+                        <span class="progression-word">Informel → Agile</span>
+                    </div>
+                    <div class="card trace" tabindex="0">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="trace-label">Trace 2 (après)</span>
+                                <h3 class="trace-title">Croq'Berry / Pop's</h3>
+                                <p class="trace-context">Projet de groupe géré en méthode agile (Scrum) pour concevoir une barre de céréales, du prototype Croq'Berry au produit final Pop's.</p>
+                                <img src="assets/img/croqberry.png" alt="Croq'Berry" class="trace-img" loading="lazy" onerror="this.src='https://placehold.co/800x400/333/999?text=Croq+Berry'">
+                            </div>
+                            <div class="card-back">
+                                <h3>Points clés : Pop's</h3>
+                                <ul>
+                                    <li><strong>Méthodologie :</strong> Scrum (Sprints, Dailies, Reviews)</li>
+                                    <li><strong>Outils :</strong> Board Jira, Kanban, ROAM (Risques)</li>
+                                    <li><strong>Agilité pure :</strong> Pivot stratégique au fil des feedbacks client</li>
+                                </ul>
+                                <i data-lucide="rotate-ccw" class="flip-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progression-summary">
+                    <h4>Mon analyse (preuve)</h4>
+                    <p>Ces deux projets montrent deux façons de collaborer. Sur TPA2, la collaboration était informelle : une grande équipe de 10 personnes, des tâches réparties par affinité, une coordination peu cadrée. J'y ai contribué en prenant en charge un volet entier (le budget et les devis) tout en m'articulant avec les autres (analyse, questionnaire, visuels).</p>
+                    <p>Sur Croq'Berry / Pop's, la collaboration est devenue structurée et agile : des rôles définis (Product Owner, Scrum Master, équipe de développement), des rituels (Sprint Planning, Daily, Review, Rétrospective), un outil partagé (Jira : backlog, kanban, burndown) et une analyse de risques collective (ROAM). Chacun savait qui faisait quoi, et le feedback du client à chaque Sprint Review nous a fait pivoter (de Croq'Berry vers Pop's) - c'est exactement la composante CE5.02 : favoriser la collaboration entre les parties prenantes.</p>
+                    <h4 style="margin-top:20px;">Mon évolution entre les deux traces</h4>
+                    <p>Entre TPA2 et Croq'Berry, ma manière de collaborer a mûri. Je suis passé d'une collaboration informelle (se répartir des tâches dans une grande équipe, sans cadre) à une collaboration structurée et itérative (rôles définis, rituels Scrum, board partagé, boucles de feedback). J'ai aussi découvert et appliqué la méthode agile (bonus AC25.01) : travailler par sprints, inspecter, s'adapter. C'est cette montée en cadre qui marque ma progression sur la compétence Entreprendre.</p>
+                    <h4 style="margin-top:20px;">Ma difficulté</h4>
+                    <p>Sur TPA2, à 10, des tâches se chevauchaient et l'information circulait mal. C'est ce qui m'a fait apprécier, sur Croq'Berry, l'intérêt d'un cadre clair : le Daily de 15 min et le board Jira ont supprimé ces frictions. Ma difficulté a été d'apprendre à m'en tenir au périmètre de mon ticket plutôt que de vouloir tout toucher.</p>
+                </div>
+                
+                <button class="btn outline btn-takeoff">Redécoller 🚀</button>
+            </div>
+        </dialog>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
