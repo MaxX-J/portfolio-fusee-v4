@@ -26,10 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isMobile && !isReducedMotion) {
         // Positionnement horizontal des planètes/astéroïdes sur le track
         nodes.forEach((node, index) => {
-            const xPos = index * NODE_SPACING;
-            // On ajoute un décalage vertical aléatoire pour les astéroïdes (index 1 à 5)
-            // Mais ils sont déjà gérés via style="margin-top: ..." dans le HTML pour un rendu maîtrisé.
-            // On fixe juste la position absolue X (left) et on centre Y (top 50%)
+            let xPos = index * NODE_SPACING;
+            
+            // Rapprocher la lune (dernier élément) du dernier astéroïde
+            if (index === nodes.length - 1) {
+                xPos = (index - 1) * NODE_SPACING + (window.innerWidth * 0.7); 
+            }
+            
+            nodePositions.push(xPos);
             gsap.set(node, { left: xPos, top: "50%" });
             totalTrackWidth = xPos;
         });
@@ -57,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mapNodes.forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 const targetIndex = parseInt(btn.getAttribute('data-scroll-to'));
-                const targetScroll = (targetIndex * NODE_SPACING);
+                const targetScroll = nodePositions[targetIndex];
                 
                 // On scroll la page (ScrollTrigger s'occupe de translater le track)
                 // Ratio du scroll total
@@ -99,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         nodes.forEach((node, index) => {
             // Seuls les astéroïdes (1 à 5) sont atterrissables
-            if (index === 0 || index === 6) return; 
+            if (index === 0 || index === nodes.length - 1) return; 
 
-            const nodeX = index * NODE_SPACING;
+            const nodeX = nodePositions[index];
             const distance = Math.abs(centerScreen - nodeX);
 
             // Si la fusée (centre) est à moins de 600px de l'astéroïde
